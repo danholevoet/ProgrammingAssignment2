@@ -1,15 +1,36 @@
-## Put comments here that give an overall description of what your
-## functions do
+## These functions allow you to repeatedly find the inverse of a matrix without
+## repeating previously computed operations.
 
-## Write a short comment describing this function
+## This function provides a special matrix that can be inverted repeatedly
+## without recalculation.
 
 makeCacheMatrix <- function(x = matrix()) {
-
+        m <- NULL
+        set <- function(y) {
+                x <<- y
+                m <<- NULL
+        }
+        get <- function() x
+        setsolve <- function(solve) m <<- solve
+        getsolve <- function() m
+        list(set = set, get = get,
+             setsolve = setsolve,
+             getsolve = getsolve)
 }
 
 
-## Write a short comment describing this function
+## This function inverts a special matrix (see makeCacheMatrix). If the inverse
+## has been previously calculated, it uses the previously computed value.
+## Otherwise, it calculates the inverse and saves it.
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+        m <- x$getsolve()
+        if(!is.null(m)) {
+                message("getting cached data")
+                return(m)
+        }
+        data <- x$get()
+        m <- solve(data, ...)
+        x$setsolve(m)
+        m
 }
